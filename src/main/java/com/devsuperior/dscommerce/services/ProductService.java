@@ -65,6 +65,11 @@ public class ProductService {
 
     }
 
+    @Transactional
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
+
     private void copyDtoToEntity(ProductDTO dto, Product entity) {
 
         //copia os dados do dto para o product
