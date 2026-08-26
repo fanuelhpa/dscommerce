@@ -33,13 +33,12 @@ public class ProductService {
 
     @Transactional
     public ProductDTO insert(ProductDTO dto) {
+
+        //instancia um product
         Product entity = new Product();
 
-        //copia os dados do dto para o product
-        entity.setName(dto.getName());
-        entity.setDescription(dto.getDescription());
-        entity.setPrice(dto.getPrice());
-        entity.setImgUrl(dto.getImgUrl());
+        //copia o dto recebido para o entity
+        copyDtoToEntity(dto, entity);
 
         //salva no banco e retorna o objeto salvo (product salvo)
         entity = repository.save(entity);
@@ -47,5 +46,31 @@ public class ProductService {
         //retorna o dto passando a entidade para ser convertida em dto
         return new ProductDTO(entity);
 
+    }
+
+    @Transactional
+    public ProductDTO update(Long id, ProductDTO dto) {
+
+        //instancia o entity monitorado pela JPA
+        Product entity = repository.getReferenceById(id);
+
+        //copia o dto para a entidade
+        copyDtoToEntity(dto, entity);
+
+        //salva no banco e retorna o objeto salvo (product salvo)
+        entity = repository.save(entity);
+
+        //retorna o dto passando a entidade para ser convertida em dto
+        return new ProductDTO(entity);
+
+    }
+
+    private void copyDtoToEntity(ProductDTO dto, Product entity) {
+
+        //copia os dados do dto para o product
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setImgUrl(dto.getImgUrl());
     }
 }
